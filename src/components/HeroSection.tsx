@@ -1,10 +1,34 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-fintech.jpg";
 import { CheckCircle, Zap, Shield } from "lucide-react";
 
+const paymentFrequencies = [
+  "day",
+  "2 days", 
+  "7 days",
+  "14 days",
+  "_ days"
+];
+
 export const HeroSection = () => {
+  const [currentFrequencyIndex, setCurrentFrequencyIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentFrequencyIndex((prev) => (prev + 1) % paymentFrequencies.length);
+        setIsAnimating(false);
+      }, 150); // Half of the animation duration
+    }, 3000); // Change every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="pt-32 pb-20 px-4 relative overflow-hidden">
       {/* Background gradient */}
@@ -21,8 +45,12 @@ export const HeroSection = () => {
             <div className="space-y-6">
               <h1 className="text-5xl lg:text-6xl font-bold text-foreground leading-tight">
                 Get paid every{" "}
-                <span className="bg-gradient-primary bg-clip-text text-transparent">
-                  2 days
+                <span 
+                  className={`bg-gradient-primary bg-clip-text text-transparent transition-all duration-300 ${
+                    isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+                  }`}
+                >
+                  {paymentFrequencies[currentFrequencyIndex]}
                 </span>
               </h1>
               
