@@ -91,6 +91,7 @@ export const Waitlist = () => {
     
     // Simulate API call
     if (referralCode) {
+      console.log("referralCode is: ", referralCode)
 
     //need to find existing referral codes, check its valid, if so find existing waitlited person
     //and then bump them up 100 places, or as far as the list allows

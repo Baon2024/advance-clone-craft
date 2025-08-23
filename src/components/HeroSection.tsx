@@ -55,7 +55,7 @@ export const HeroSection = () => {
               </h1>
               
               <p className="text-xl text-muted-foreground leading-relaxed max-w-lg">
-                Don't wait 30-90 days for payments. Get instant access to your earned revenue and accelerate your business growth today.
+                Don't wait 30-90 days for your salary. Footballers are paid weekly, why shouldn't you be?
               </p>
             </div>
 
