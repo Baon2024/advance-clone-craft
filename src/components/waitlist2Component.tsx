@@ -8,11 +8,13 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Lock, Share2, Copy, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/hooks/use-supabase";
+//import { getNextWaitlistPosition, addRefereeToWaitlistNoReferralCode } from 
+import { getNextWaitlistPosition, addRefereeToWaitlistNoReferralCode } from "@/pages/helperFunction";
 
 const sleep = (interval) => new Promise((resolve) => setTimeout(resolve, interval))
 
 // Mock waitlist data for demonstration
-const generateWaitlistData = (userPosition: number, userEmail: string, referralCode: string) => {
+const generateWaitlistData = (userPosition: number, userEmail: string, referralCode: string, usedReferralCode: boolean) => {
   const mockEmails = [
     "alex.smith@email.com",
     "sarah.jones@email.com", 
@@ -35,8 +37,11 @@ const generateWaitlistData = (userPosition: number, userEmail: string, referralC
 
 
   const waitlistEntries = [];
-  
-  for (let i = userPosition - 2; i <= userPosition + 2; i++) {
+
+  //need to be dynamic, so shows them at end of list if no referralCode, otherwise shows two after them;
+  console.log("usedReferralCode is: ", usedReferralCode);
+  if (usedReferralCode) {
+    for (let i = userPosition - 2; i <= userPosition + 2; i++) {
     if (i === userPosition) {
       waitlistEntries.push({
         position: i,
@@ -54,18 +59,44 @@ const generateWaitlistData = (userPosition: number, userEmail: string, referralC
       });
     }
   }
+  } else if (!usedReferralCode) {
+
+    for (let i = userPosition - 4; i <= userPosition; i++) {
+    if (i === userPosition) {
+      waitlistEntries.push({
+        position: i,
+        email: userEmail,
+        isUser: true,
+        referralCode: referralCode || 'N/A'
+      });
+    } else if (i > 0) {
+      const emailIndex = (i - 1) % mockEmails.length;
+      waitlistEntries.push({
+        position: i,
+        email: blurEmail(mockEmails[emailIndex]),
+        isUser: false,
+        referralCode: 'N/A'
+      });
+    }
+  }
+  }
+  
+  
   
   return waitlistEntries.filter(entry => entry.position > 0);
 };
 
-export const Waitlist = () => {
+export const Waitlist2Component = () => {
   const [email, setEmail] = useState("");
   const [referralCode, setReferralCode] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [userPosition, setUserPosition] = useState<number>(0);
   const [userReferralCode, setUserReferralCode] = useState<string>("");
+  const [usedReferralCode, setUsedReferralCode ] = useState(false);
   const { toast } = useToast();
+
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,30 +119,81 @@ export const Waitlist = () => {
 
 
     setIsLoading(true);
-    
-    // Simulate API call
-    if (referralCode) {
+
+    //create new referralCode
+    const newReferralCode = `PAY${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    setUserReferralCode(newReferralCode);
+
+    let nextWaitlistPosition = await getNextWaitlistPosition();
+    let currentWaitlistNumber = nextWaitlistPosition - 1;
+
+    if (!referralCode) {
+        //logic that is unique for no referal code condition
+
+        let result = await addRefereeToWaitlistNoReferralCode(email, newReferralCode, nextWaitlistPosition)//don't need to return anything
+        if (!result.success) {
+           // handle error
+           console.error("Insertion failed:", result.error);
+           
+           toast({
+               title: "Failed to add you to the waitlist!",
+               description: "Please try again",
+            });
+        } else {
+          // handle success
+          console.log("Insertion succeeded:", result.data);
+          setUserPosition(nextWaitlistPosition);
+          setIsLoading(false);
+          setIsSubmitted(true);
+          toast({
+            title: "Welcome to the waitlist!",
+            description: "We'll notify you as soon as we launch.",
+          });
+        }
+        return;
+    } else if (referralCode) {
       console.log("referralCode is: ", referralCode)
 
-    //need to find existing referral codes, check its valid, if so find existing waitlited person
-    //and then bump them up 100 places, or as far as the list allows
-
-    //search existing database with .eq(referral_code, referralCode)
-    //if error exists, then not valid
-
+    
+      //check referral code if valid
     let { data: referrer, error } = await supabase
     .from('waitlist_salary_advance')
     .select("*")
     .eq('referral_code', referralCode)
 
-    if (error) {
+    if (error || !referrer || referrer.length === 0) {
       console.log("not a valid referral code from database: ", error);
 
+      toast({
+               title: "Your referral code is not valid!",
+              description: "Adding you to waitlist without referral boost",
+        });
+
       //need to then do non-referral code workflow. 
+      let result = await addRefereeToWaitlistNoReferralCode(email, newReferralCode, nextWaitlistPosition)//don't need to return anything
+        
+      if (result) {
+            setUserPosition(nextWaitlistPosition);
+        setIsLoading(false);
+        setIsSubmitted(true);
+        
+        toast({
+            title: "Welcome to the waitlist!",
+            description: "We'll notify you as soon as we launch.",
+        });
+        return;
+
+        } else {
+             toast({
+               title: "Failed to add you to the waitlist!",
+              description: "Please try again",
+        });
+        return;
+        }
 
 
     } else if (referrer) {
-      if (referrer.length > 0) {
+      
       console.log("valid referral code, belongs to: ", referrer[0].email)
 
       toast({
@@ -119,50 +201,18 @@ export const Waitlist = () => {
         description: `referral code belongs to: ${referrer[0].email}`,
       });
 
-      await sleep(5000)
+      await sleep(3000)
 
       referralBonus = true;
       referrerIdentity = referrer[0].email
       referrerIdentityId = referrer[0].id
       referrerIdentityWaitingPosition = referrer[0].waitlist_position
-      } else {
-        console.log("not a valid referral code from database:");
-      }
-    }
-
-      toast({
-        title: "Ah ha",
-        description: "Not a valid referral code!",
-      });
-
-    }
       
+    
 
-      //add the real supabase insertion code here. 
-      
-      const newReferralCode = `PAY${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-      setUserReferralCode(newReferralCode);
-
-      //get existing rows of signed-up, add 1 to total, set that as waitlist position
-      //to replace random position code
-      let { data: waitlist_salary_advance, error: error2 } = await supabase
-  .from('waitlist_salary_advance')
-  .select('waitlist_position')
-
-      console.log("waitlist_positions already are: ", waitlist_salary_advance, error2)
-      let currentWaitlistNumber = 0
-      for (const item of waitlist_salary_advance) {
-        if (item.waitlist_position > currentWaitlistNumber) {
-          currentWaitlistNumber = item.waitlist_position;
-          //console.log("current_waitlist_number has risen to: ", currentWaitlistNumber);
-        }
-      }
-
-      let nextWaitlistPosition = currentWaitlistNumber + 1
-      console.log("nextWaitlistPositionIs: ", nextWaitlistPosition)
 
       
-      if (referralBonus === true) {
+      
         //if they've used referral bonus, need to boost them by 25 places
         //and boost code person belonged to by 100
         let nextWaitlistPositionBonus = nextWaitlistPosition - 25;
@@ -173,6 +223,8 @@ export const Waitlist = () => {
           return;
         }
 
+
+        //extract every row of waitlist from where the new referee will be added, and bump them down by 1.
         for (let x = nextWaitlistPositionBonus; x <= currentWaitlistNumber; x++) {
 
 
@@ -203,16 +255,11 @@ export const Waitlist = () => {
 
            if (data) {
           console.log(`row ${x} updated!`)
-
-          //then update referred position
-            
-          }
-          }
-
+            }
           
-          
+        }}
+        //then update referred position to the vacant space.
 
-        }
         const { data: data2, error: error2 } = await supabase
             .from('waitlist_salary_advance')
             .insert([
@@ -268,12 +315,9 @@ export const Waitlist = () => {
           //then update referred position
             
           }
-          }
+          }}
 
-          
-          
-
-        }
+          //then insert referrer in their new position, 100 up from their current
          const { data, error } = await supabase
            .from('waitlist_salary_advance')
            .update({ waitlist_position: updatedReferrerPosition })
@@ -285,7 +329,8 @@ export const Waitlist = () => {
             console.log("updated both referrer and referee positions!")
 
             setIsLoading(false);
-      setIsSubmitted(true);
+            setIsSubmitted(true);
+            setUsedReferralCode(true)
       
       
       toast({
@@ -293,40 +338,11 @@ export const Waitlist = () => {
         description: "We'll notify you as soon as we launch.",
       });
 
-        return
-      }
+      return;
+      } 
+    }
 
-
-      const { data, error } = await supabase
-      .from('waitlist_salary_advance')
-      .insert([
-        { email: email, referral_code: newReferralCode, waitlist_position: nextWaitlistPosition },
-      ])
-      .select()
-
-      if (error) {
-        console.log("error from waitlist entry insertion is: ", error)
-      } else if (data) {
-        console.log("data from waitlist entry insertion is: ", data)
-      }
-      
-      // Generate random position (simulate based on referral code)
-      //const basePosition = Math.floor(Math.random() * 5000) + 1000;
-      //const position = referralCode ? Math.max(1, basePosition - 100) : basePosition;
-      setUserPosition(nextWaitlistPosition);
-      
-      setIsLoading(false);
-      setIsSubmitted(true);
-      
-      
-      toast({
-        title: "Welcome to the waitlist!",
-        description: "We'll notify you as soon as we launch.",
-      });
-   
-
-
-  };
+};
 
   const copyShareLink = () => {
     const shareUrl = `${window.location.origin}/waitlist?ref=${userReferralCode}`;
@@ -346,7 +362,7 @@ export const Waitlist = () => {
   };
 
   if (isSubmitted) {
-    const waitlistData = generateWaitlistData(userPosition, email, userReferralCode);
+    const waitlistData = generateWaitlistData(userPosition, email, userReferralCode, usedReferralCode);
     
     return (
       <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-accent/50 via-background to-background">
@@ -367,6 +383,11 @@ export const Waitlist = () => {
                 <Users className="w-4 h-4 mr-2" />
                 {(userPosition - 1).toLocaleString()} people ahead of you
               </Badge>
+              {usedReferralCode && (
+              <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-green-800 font-medium">🚀 You've been boosted 25 places from a referral code!</p>
+              </div>
+            )}
             </div>
           </div>
 

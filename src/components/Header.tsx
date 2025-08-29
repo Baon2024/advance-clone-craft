@@ -9,10 +9,10 @@ export const Header = () => {
           <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">P</span>
           </div>
-          <span className="text-xl font-bold text-foreground">PayAdvance</span>
+          <span className="text-xl font-bold text-foreground">Payday</span>
         </div>
 
-        <nav className="hidden md:flex items-center gap-8">
+        {/*<nav className="hidden md:flex items-center gap-8">
           <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
             Features
           </Link>
@@ -25,13 +25,13 @@ export const Header = () => {
           <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
             Contact
           </Link>
-        </nav>
+        </nav>*/}
 
-        <Link to="/waitlist">
+        {/*<Link to="/waitlist">
           <Button variant="hero" className="shadow-button">
             Join the Waitlist
           </Button>
-        </Link>
+        </Link>*/}
       </div>
     </header>
   );

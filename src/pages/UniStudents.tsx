@@ -1,5 +1,5 @@
 import { Header } from "@/components/Header";
-import { HeroSection } from "@/components/HeroSection";
+import { HeroSectionStudent } from "@/components/HeroSectionStudent";
 import { FeaturesSection } from "@/components/FeaturesSection";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { PricingSection } from "@/components/PricingSection";
@@ -9,23 +9,15 @@ import { ContactSection } from "@/components/ContactSection";
 import { CTASection } from "@/components/CTASection";
 import { Waitlist2Component } from "@/components/waitlist2Component";
 
-const Index = () => {
+const UniStudents = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <main>
-        <HeroSection />
-        <Waitlist2Component />
-        <FeaturesSection />
-        <HowItWorksSection />
-        <PricingSection />
-        <StatsSection />
-        <DifferentiatorsSection />
-        <ContactSection />
-        <CTASection />
+        <HeroSectionStudent />
       </main>
     </div>
   );
 };
 
-export default Index;
+export default UniStudents;
