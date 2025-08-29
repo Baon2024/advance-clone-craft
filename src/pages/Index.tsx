@@ -12,18 +12,7 @@ import { Waitlist2Component } from "@/components/waitlist2Component";
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-      <main>
-        <HeroSection />
-        <Waitlist2Component />
-        <FeaturesSection />
-        <HowItWorksSection />
-        <PricingSection />
-        <StatsSection />
-        <DifferentiatorsSection />
-        <ContactSection />
-        <CTASection />
-      </main>
+      <p>nothing to see here..</p>
     </div>
   );
 };
