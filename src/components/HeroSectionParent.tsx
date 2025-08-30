@@ -18,7 +18,9 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/hooks/use-supabase";
-import { getNextWaitlistPosition, addRefereeToWaitlistNoReferralCode } from "@/pages/helperFunction";
+import { getNextWaitlistPosition, addRefereeToWaitlistNoReferralCode, getCurrentWaitlistTotal } from "@/pages/helperFunction";
+import WaitlistCounterTicker from "./waiterCounterTicker";
+
 
 
 
@@ -42,6 +44,7 @@ export const HeroSectionParent = () => {
   const [userReferralCode, setUserReferralCode] = useState<string>("");
   const [usedReferralCode, setUsedReferralCode ] = useState(false);
   const [ waitlistData, setWaitlistData ] = useState([])
+  const [ waitlistCount, setWaitlistCount ] = useState()
   const { toast } = useToast();
 
   useEffect(() => {
@@ -52,6 +55,9 @@ export const HeroSectionParent = () => {
         setIsAnimating(false);
       }, 150); // Half of the animation duration
     }, 2000); // Change every 3 seconds
+
+    getCurrentWaitlistTotal(setWaitlistCount)
+    console.log("currentWaitlistTotal after setting is: ", waitlistCount)
 
     return () => clearInterval(interval);
   }, []);
@@ -480,8 +486,15 @@ const handleSubmit = async (e: React.FormEvent) => {
               </div>
             </div>
 
+            
+
             {/* Waitlist Form - Right Side */}
-            <div className="flex-shrink-0 w-full lg:w-auto">
+            <div className="flex-shrink-0 w-full lg:w-auto space-y-6">
+
+              <div className="flex justify-center">
+                  <WaitlistCounterTicker count={waitlistCount} variant="ticker" />
+                </div>
+
               <Card className="max-w-lg border-0 shadow-2xl bg-white/80 backdrop-blur-sm rounded-3xl transform hover:scale-105 transition-transform duration-300">
                 <CardContent className="p-10 space-y-8">
                   <div className="space-y-6">

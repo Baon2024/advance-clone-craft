@@ -27,6 +27,25 @@ export async function getNextWaitlistPosition() {
     return nextWaitlistPosition
 }
 
+export async function getCurrentWaitlistTotal(setWaitlistCount) {
+
+    let { data: waitlist_salary_advance, error: error2 } = await supabase
+      .from('waitlist_salary_advance')
+      .select('waitlist_position')
+    
+    console.log("waitlist_positions already are: ", waitlist_salary_advance, error2)
+    let currentWaitlistNumber = 0
+    for (const item of waitlist_salary_advance) {
+        if (item.waitlist_position > currentWaitlistNumber) {
+            currentWaitlistNumber = item.waitlist_position;
+              //console.log("current_waitlist_number has risen to: ", currentWaitlistNumber);
+            }
+          }
+    
+    console.log("currentWaitlisTotal is: ", currentWaitlistNumber);
+    setWaitlistCount(currentWaitlistNumber)
+}
+
 
 export async function addRefereeToWaitlistNoReferralCode(email, newReferralCode, nextWaitlistPosition, landing_page) {
   const { data, error } = await supabase
