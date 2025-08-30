@@ -43,7 +43,11 @@ export async function getCurrentWaitlistTotal(setWaitlistCount) {
           }
     
     console.log("currentWaitlisTotal is: ", currentWaitlistNumber);
-    setWaitlistCount(currentWaitlistNumber)
+    if (typeof currentWaitlistNumber === "number") {
+      setWaitlistCount(currentWaitlistNumber)
+    } else {
+      setWaitlistCount(0)
+    }
 }
 
 
