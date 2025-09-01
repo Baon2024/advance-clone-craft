@@ -18,7 +18,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/hooks/use-supabase";
-import { getNextWaitlistPosition, addRefereeToWaitlistNoReferralCode, getCurrentWaitlistTotal } from "@/pages/helperFunction";
+import { getNextWaitlistPosition, addRefereeToWaitlistNoReferralCode, getCurrentWaitlistTotal, checkWhetherEmailAlreadyWaitlisted } from "@/pages/helperFunction";
 import WaitlistCounterTicker from "./waiterCounterTicker";
 
 
@@ -156,6 +156,18 @@ const handleSubmit = async (e: React.FormEvent) => {
     }
 
     //check whether email has already been added
+    const emailCheckResponse = await checkWhetherEmailAlreadyWaitlisted(email)
+    //console.log("emailCheckResponse is: ", emailCheckResponse);
+    const isEmailWaitlisted = emailCheckResponse.notWaitlisted
+    console.log("isEmailedWaitlisted is: ", isEmailWaitlisted);
+    if (isEmailWaitlisted === false) {
+      toast({
+        title: "Already on Waitlist",
+        description: "Don't worry, You're already on the waitlist :)",
+        variant: "destructive",
+      });
+      return;
+    }
 
 
     setIsLoading(true);
