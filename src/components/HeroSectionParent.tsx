@@ -44,7 +44,7 @@ export const HeroSectionParent = () => {
   const [userReferralCode, setUserReferralCode] = useState<string>("");
   const [usedReferralCode, setUsedReferralCode ] = useState(false);
   const [ waitlistData, setWaitlistData ] = useState([])
-  const [ waitlistCount, setWaitlistCount ] = useState()
+  const [ waitlistCount, setWaitlistCount ] = useState(0)
   const { toast } = useToast();
 
   useEffect(() => {
