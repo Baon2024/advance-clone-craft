@@ -9,6 +9,7 @@ import { Waitlist2 } from "./pages/Waitlist2";
 import NotFound from "./pages/NotFound";
 import UniStudents from "./pages/UniStudents";
 import Parents from "./pages/Parents";
+import Launchlist from "./pages/Launchlist";
 
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/waitlist" element={<Waitlist2 />} />
           <Route path="/UniStudents" element={<UniStudents />} />
           <Route path="/Parents" element={<Parents />} />
+          <Route path="/Launchlist" element={<Launchlist />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

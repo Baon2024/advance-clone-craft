@@ -83,6 +83,7 @@ export async function checkWhetherEmailAlreadyWaitlisted(email) {
         return { notWaitlisted: true, error }
     } else if (emailNotWaitlisted) {
         console.log("email already waitlisted!")
+        console.log("emailWaitlist match: ", emailNotWaitlisted)
         return { notWaitlisted: false, emailNotWaitlisted}
     }
 
