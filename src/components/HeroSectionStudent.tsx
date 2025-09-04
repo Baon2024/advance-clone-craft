@@ -466,7 +466,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <div className="space-y-6">
                   <h1 className="text-4xl md:text-6xl font-black text-purple-900 leading-tight transform hover:scale-105 transition-transform duration-300">
                     Split your student loan into{" "}
-                    <span className="text-pink-600 underline decoration-wavy decoration-pink-400">installments</span>
+                    <span className="text-pink-600 underline decoration-wavy decoration-pink-400">instalments</span>
                   </h1>
                   <h2 className="text-2xl md:text-3xl font-bold text-purple-800 leading-relaxed">
                     schedule tranches every{" "}
