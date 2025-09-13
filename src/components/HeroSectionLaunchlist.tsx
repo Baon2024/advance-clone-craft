@@ -1,11 +1,12 @@
 import { WaitlistFormMinimal } from "./waitlistFormMinimal.tsx"
 
-export default function HeroSectionLaunchlist() {
+
+  export default function HeroSectionLaunchlist() {
   return (
-    <div className="h-screen bg-gray-50 overflow-hidden">
-      <section className="h-full flex items-center px-8">
+    <div className="min-h-svh bg-gray-50 overflow-x-hidden">
+      <section className="min-h-inherit flex items-start md:items-center px-4 md:px-8 py-8">
         <div className="w-full max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-20 items-center h-full">
+          <div className="grid lg:grid-cols-2 gap-20 items-start md:items-center">
             {/* Left Column */}
             <div className="space-y-12">
               <div className="space-y-8">
@@ -13,7 +14,7 @@ export default function HeroSectionLaunchlist() {
                   CAMBRIDGE UNIVERSITY / PHD RESEARCH / 2025
                 </div>
 
-                <h1 className="text-7xl lg:text-8xl font-light text-gray-900 leading-none tracking-tight">
+                <h1 className="text-5xl md:text-7xl lg:text-8xl font-light text-gray-900 leading-none tracking-tight">
                   Salary
                   <br />
                   <span className="italic">Frequency</span>
@@ -21,7 +22,7 @@ export default function HeroSectionLaunchlist() {
                   Study
                 </h1>
 
-                <p className="text-xl text-gray-600 leading-relaxed max-w-lg font-light">
+                <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-lg font-light">
                   Investigating the impact of flexible salary payment schedules on employee well-being. A one-month
                   research study with full participant autonomy.
                 </p>
@@ -36,7 +37,7 @@ export default function HeroSectionLaunchlist() {
               </div>
 
               <div className="space-y-6">
-                <div className="h-px bg-gray-200"></div>
+                <div className="h-px bg-gray-200" />
                 <div className="grid grid-cols-2 gap-8 text-sm">
                   <div>
                     <div className="text-gray-400 font-mono mb-2">DURATION</div>
@@ -55,7 +56,7 @@ export default function HeroSectionLaunchlist() {
                     <div className="text-gray-900">Voluntary</div>
                   </div>
                 </div>
-                <div className="h-px bg-gray-200"></div>
+                <div className="h-px bg-gray-200" />
               </div>
             </div>
 
