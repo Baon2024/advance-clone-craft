@@ -1,10 +1,9 @@
 import { Header } from "@/components/Header";
-import { HeroSectionLaunchlist } from "@/components/HeroSectionLaunchlist";
+import HeroSectionLaunchlist from "@/components/HeroSectionLaunchlist";
 
-const Launchlist = () => {
+const Research = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Header />
       <main>
         <HeroSectionLaunchlist />
       </main>
@@ -12,4 +11,4 @@ const Launchlist = () => {
   );
 };
 
-export default Launchlist;
+export default Research;
