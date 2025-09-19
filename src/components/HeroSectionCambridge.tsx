@@ -192,10 +192,17 @@ const handleSubmit = async (e: React.FormEvent) => {
   return (
     <section className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-pink-100 via-purple-50 to-indigo-100">
       <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto w-full">
+        <div className="text-center mb-16">
+          <h1 className="text-7xl sm:text-8xl lg:text-9xl font-bold text-pink-500 tracking-tight font-coiny mb-4">
+            <strong>Payday</strong>
+          </h1>
+          <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-500 mx-auto rounded-full"></div>
+        </div>
         {!isSubmitted ? (
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
             {/* Call to Action - Left Side */}
-            <h1 className="text-6xl sm:text-7xl font-bold text-pink-500 mb-6 tracking-tight font-coiny"><strong>Payday</strong></h1>
+            
             <div className="flex-1 space-y-8 text-center lg:text-left">
               <Badge
                 variant="outline"
@@ -321,6 +328,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             </div>
           </div>
         )}
+      </div>
       </div>
     </section>
   )
