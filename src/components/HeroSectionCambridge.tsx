@@ -26,11 +26,10 @@ import WaitlistCounterTicker from "./waiterCounterTicker";
 
 
 const paymentFrequencies = [
-  "day",
-  "2 days", 
-  "7 days",
-  "14 days",
-  "_ days"
+  "daily",
+  "weekly", 
+  "fortnightly",
+  "custom"
 ];
 
 export const HeroSectionCambridge = () => {
@@ -145,7 +144,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     const { data, error } = await supabase
       .from('waitlist_salary_advance')
       .insert([
-        { email: email, referral_code: null, waitlist_position: null, landing_page_referral: "student, debit, variant 1" },
+        { email: email, referral_code: null, waitlist_position: null, landing_page_referral: "Cambridge, debit" },
       ])
       .select();
     
@@ -202,7 +201,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 variant="outline"
                 className="text-purple-700 border-purple-300 bg-purple-100 px-6 py-3 rounded-full text-lg animate-bounce"
               >
-                🚀 Protect their living budget
+                🚀 Fixing money
               </Badge>
 
               <div className="space-y-6">
@@ -210,15 +209,17 @@ const handleSubmit = async (e: React.FormEvent) => {
                   Get paid as you earn - not weeks later
                 </h1>
                 <h2 className="text-2xl md:text-3xl font-bold text-purple-800 leading-relaxed">
-                  Decide how often to help out: every{" "}
-                  <span className="text-pink-600 bg-pink-200 px-3 py-1 rounded-full transition-all duration-500 transform hover:scale-110">
+                  Choose {" "}
+                  <span className="text-green-600 bg-white-200 px-3 py-1 rounded-full transition-all duration-500 transform hover:scale-110">
                     {paymentFrequencies[currentFrequencyIndex]}
                   </span>
+                  payments 📅
                 </h2>
               </div>
 
               <p className="text-xl text-purple-700 max-w-2xl lg:max-w-none leading-relaxed font-medium">
-                Teach them responsible budgeting, whilst protecting them from scams ✨
+                No employer approval required ✨
+                No risk - We’re paying you before you ever pay us
               </p>
 
               {/* Fun indicators */}
@@ -265,7 +266,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     className="w-full h-14 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 hover:from-purple-600 hover:via-pink-600 hover:to-purple-700 text-white text-lg rounded-2xl shadow-lg font-bold transform hover:scale-105 transition-all duration-300"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Joining... 🎉" : "Join the Waitlist 🚀"}
+                    {isLoading ? "Joining... 🎉" : "Join the Launchlist 🚀"}
                   </Button>
 
                   <div className="flex items-center justify-center gap-2 text-sm text-purple-600 font-medium">
@@ -285,7 +286,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto lg:mx-0 shadow-lg animate-bounce">
                   <span className="text-3xl">🎉</span>
                 </div>
-                <h2 className="text-4xl font-black text-purple-900">You're on the waitlist! 🎯</h2>
+                <h2 className="text-4xl font-black text-purple-900">You're on the launchlist! 🎯</h2>
               </div>
 
                
@@ -300,11 +301,8 @@ const handleSubmit = async (e: React.FormEvent) => {
               <Card className="border-0 shadow-2xl bg-white/80 backdrop-blur-sm rounded-3xl">
                 <CardContent className="p-8 space-y-6">
                   <div className="text-center space-y-4">
-                    <p className="text-purple-700 font-bold text-xl">Your referral code 🎁</p>
+                    <p className="text-purple-700 font-bold text-xl">Share 🎁</p>
                     <div className="flex items-center gap-3">
-                      <code className="flex-1 text-xl font-bold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 px-6 py-4 rounded-2xl border-2 border-purple-300">
-                        {userReferralCode}
-                      </code>
                       <Button
                         variant="outline"
                         size="lg"
@@ -315,7 +313,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                       </Button>
                     </div>
                     <p className="text-sm text-purple-600 font-medium">
-                      Share with friends to boost your position! Each referral moves you up 50 spots! 🚀
+                      Share with friends !🚀
                     </p>
                   </div>
                 </CardContent>
